@@ -47,7 +47,7 @@
 
 <script>
     /* eslint-disable */
-    import {requestLogin, recordVisitor, dingConfig} from '../../api/api';
+    import {requestLogin, recordVisitor, dingConfig, test} from '../../api/api';
 
     export default {
         data() {
@@ -186,8 +186,8 @@
                     let _this = this;
                     let {msg, code, data} = _data;
                     if (code === '999999') {
-                        // var url = encodeURIComponent(test+'/#/register');
-                        var url = encodeURIComponent('http://127.0.0.1:8080/#/register');
+                        var url = encodeURIComponent(test+'/#/register');
+                        // var url = encodeURIComponent('http://127.0.0.1:8080/#/register');
                         var goto = encodeURIComponent('https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + data.app_id + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + url);
 
                         var obj = DDLogin({
