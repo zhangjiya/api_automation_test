@@ -211,18 +211,23 @@ def test_api(host_id, case_id, project_id, _id):
                 logging.info(response_parameter_list)
                 logging.info(response_data)
                 result = check_json(json.loads(response_parameter_list), response_data)
+                logging.info("Json校验对比结果{}".format(result))
             except Exception:
                 logging.info(response_parameter_list)
                 result = check_json(eval(response_parameter_list.replace('true', 'True').replace('false', 'False').replace("null", "None")), response_data)
-            if result:
+                logging.info("Json校验对比结果{}".format(result))
+            if result=='success':
                 record_results(_id=_id, url=url, request_type=request_type, header=header, parameter=parameter,
                                status_code=http_code, examine_type="JSON校验", examine_data=response_parameter_list,
                                host=host.name, _result='PASS', code=code, response_data=response_data)
+                return 'success'
             else:
                 record_results(_id=_id, url=url, request_type=request_type, header=header, parameter=parameter,
                                status_code=http_code, examine_type="JSON校验", examine_data=response_parameter_list,
                                host=host.name, _result='FAIL', code=code, response_data=response_data)
-            return result
+                return 'fail'
+            # 0728-修改
+            # return result
         else:
             record_results(_id=_id, url=url, request_type=request_type, header=header, parameter=parameter,
                            status_code=http_code, examine_type="JSON校验", examine_data=response_parameter_list,
@@ -310,10 +315,11 @@ def post(header, address, request_parameter_type, data):
     response = requests.post(url=address, data=data, headers=header, timeout=8)
     try:
         return response.status_code, response.json(), response.headers
+    # 0728修改将''修改成了{}
     except json.decoder.JSONDecodeError:
-        return response.status_code, '', response.headers
+        return response.status_code, {}, response.headers
     except simplejson.errors.JSONDecodeError:
-        return response.status_code, '', response.headers
+        return response.status_code, {}, response.headers
     except Exception as e:
         logging.exception('ERROR')
         logging.error(e)
@@ -329,6 +335,7 @@ def get(header, address, request_parameter_type, data):
     :param data: 请求参数
     :return:
     """
+    logging.info("GET请求{}{}{}".format(address,request_parameter_type,data))
     if request_parameter_type == 'raw':
         data = json.dumps(data)
     response = requests.get(url=address, params=data, headers=header, timeout=8)
@@ -337,9 +344,10 @@ def get(header, address, request_parameter_type, data):
     try:
         return response.status_code, response.json(), response.headers
     except json.decoder.JSONDecodeError:
-        return response.status_code, '', response.headers
+        # 0728修改将''修改成了{}
+        return response.status_code, {}, response.headers
     except simplejson.errors.JSONDecodeError:
-        return response.status_code, '', response.headers
+        return response.status_code, {}, response.headers
     except Exception as e:
         logging.exception('ERROR')
         logging.error(e)

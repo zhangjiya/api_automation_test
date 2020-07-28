@@ -3,7 +3,7 @@ import datetime
 import django
 import sys
 import os
-
+import logging
 from api_test.serializers import ProjectDynamicDeserializer
 
 curPath = os.path.abspath(os.path.dirname(__file__))
@@ -63,11 +63,15 @@ def check_json(src_data, dst_data):
     """
     global result
     try:
+        # 0728修改
+        # if isinstance(check_json, dict):
         if isinstance(src_data, dict):
             """若为dict格式"""
             for key in src_data:
+                logging.info("数据{}，dtaP{}{}".format(key,src_data,dst_data))
                 if key not in dst_data:
                     result = 'fail'
+                    logging.info("不存在{}".format(key))
                 else:
                     # if src_data[key] != dst_data[key]:
                     #     result = False
@@ -75,14 +79,22 @@ def check_json(src_data, dst_data):
                     """递归"""
                     if isinstance(src_data[this_key], dict) and isinstance(dst_data[this_key], dict):
                         check_json(src_data[this_key], dst_data[this_key])
-                    elif isinstance(type(src_data[this_key]), type(dst_data[this_key])):
-                        result = 'fail'
+                    # elif isinstance(type(src_data[this_key]), type(dst_data[this_key])):
+                    # 0728修改
+                    elif isinstance(src_data[this_key], type(dst_data[this_key])):
+                        if src_data[this_key]==dst_data[this_key]:
+                            result='success'
+                        else:
+                            result = 'fail'
+                        # print("key[]不相等", src_data[this_key],this_key, result)
                     else:
                         pass
+            logging.info("json对比结果是{}".format(result))
             return result
         return 'fail'
 
     except Exception as e:
+        logging.error("对比失败原因是{}".format(e))
         return 'fail'
 
 
