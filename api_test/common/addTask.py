@@ -32,7 +32,7 @@ def add(host_id, _type, start_time, end_time, project, frequency=None, unit=None
             start_time[2],
             start_time[1],
         )
-        job = my_user_cron.new(command='/usr/local/python3/bin/python3 /opt/app/api_automation_test/api_test/common/auto_test.py %s %s >> /opt/app/api_automation_test/%s.log'
+        job = my_user_cron.new(command='/root/.local/share/virtualenvs/api_automation_test-0j3Yppsg/bin/python3 /opt/app/api_automation_test/api_test/common/auto_test.py %s %s >> /opt/app/api_automation_test/%s.log'
                                        % (host_id, project, project))
         logging.info("addtask_type=timing{}".format(_type))
     else:
@@ -44,7 +44,7 @@ def add(host_id, _type, start_time, end_time, project, frequency=None, unit=None
         )
         logging.info("addtask_type=else{}".format(_type))
         #  创建任务
-        job = my_user_cron.new(command='/usr/local/python3/bin/python3 /opt/app/api_automation_test/api_test/common/auto_test.py %s %s %s %s %s %s %s %s >> '
+        job = my_user_cron.new(command='/root/.local/share/virtualenvs/api_automation_test-0j3Yppsg/bin/python3 /opt/app/api_automation_test/api_test/common/auto_test.py %s %s %s %s %s %s %s %s >> '
                                        '/opt/app/api_automation_test/%s.log'
                                        % (frequency, unit, host_id, end_time[4], end_time[3],
                                           end_time[2], end_time[1], project, project))
