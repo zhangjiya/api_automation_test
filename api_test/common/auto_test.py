@@ -3,7 +3,7 @@ import django
 import sys
 import os
 import pytz
-
+import logging
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 PathProject = os.path.split(rootPath)[0]
@@ -19,11 +19,14 @@ from api_test.models import AutomationCaseApi, AutomationTaskRunTime, Automation
 
 def automation_task():
     # data = AutomationCaseApi.objects.filter(automationTestCase=sys.argv[1])
+    logging.info("auto_test.py{}")
     tz = pytz.timezone('Asia/Shanghai')
     start_time = datetime.datetime.now(tz)
     format_start_time = start_time.strftime('%Y-%m-%d %H:%M:%S')
+    logging.info("auto_test.py{}".format(format_start_time))
     case = AutomationTestCase.objects.filter(project=sys.argv[2])
     host = GlobalHost.objects.get(id=sys.argv[1], project=sys.argv[2])
+    logging.info("auto_test.py-案例是{},host是{}".format(case,host))
     _pass = 0
     fail = 0
     error = 0
