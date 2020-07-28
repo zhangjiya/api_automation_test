@@ -32,9 +32,7 @@ def add(host_id, _type, start_time, end_time, project, frequency=None, unit=None
             start_time[2],
             start_time[1],
         )
-        job = my_user_cron.new(command='/usr/local/python3/bin/python3 /var/lib/jenkins/workspace/'
-                                       'api_automation_test_master-JU72M6SAEYKDY6SN3LUUPLXPTX3F35MVFZ5'
-                                       '7J4JE3I5TJCTRFXHQ/api_test/common/auto_test.py %s %s >> /var/lib/task/%s.log'
+        job = my_user_cron.new(command='../api_test/common/auto_test.py %s %s >> ../%s.log'
                                        % (host_id, project, project))
         logging.info("addtask_type=timing{}".format(_type))
     else:
